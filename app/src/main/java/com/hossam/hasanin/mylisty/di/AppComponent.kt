@@ -21,7 +21,6 @@ import javax.inject.Singleton
 )
 interface AppComponent : AndroidInjector<BaseApplication> {
 
-
     @Component.Factory
     interface Factory {
         fun application(@BindsInstance application: Application?): AppComponent

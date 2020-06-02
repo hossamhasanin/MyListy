@@ -7,30 +7,21 @@
         android:id="@+id/mainPageFragment"
         android:name="com.hossam.hasanin.main.MainPageFragment"
         android:label="MainPageFragment" >
-        <deepLink app:uri="myListy://main"/>
+        <argument
+            android:name="done"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/upsertNoteFragment"
         android:name="com.hossam.hasanin.upsertnote.UpsertNoteFragment"
         android:label="UpsertNoteFragment">
-
-        <deepLink
-            android:id="@+id/deepLink"
-            app:uri="myListy://upsert/{new}/{id}/{title}/{des}" />
-        <argument
-            android:name="id"
-            app:argType="integer" />
-        <argument
-            android:name="title"
-            app:argType="string" />
-        <argument
-            android:name="des"
-            app:argType="string" />
-        <deepLink
-            android:id="@+id/deepLink2"
-            app:uri="myListy://upsert/{new}" />
         <argument
             android:name="new"
             app:argType="boolean" />
+        <argument
+            android:name="note"
+            app:argType="com.hossam.hasanin.base.models.Note"
+            app:nullable="true" />
     </fragment>
 </navigation>

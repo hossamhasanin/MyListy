@@ -9,8 +9,8 @@ import java.lang.Exception
 class MainUseCase(private val repo: MainRepository) {
     fun getNotes(viewState: MainViewState): Observable<MainViewState>{
         val l = viewState.notes
-        val lastId = if (l.isEmpty()) 0 else l[l.lastIndex].note!!.id
-        return repo.showNotes(lastId).materialize().map {
+        val lastId = if (l.isEmpty()) 0 else l[l.lastIndex].note!!.id!!
+        return repo.showNotes(0).materialize().map {
             it.value?.let {
                 l.addAll(it.map { NoteWrapper(it , NoteWrapper.CONTENT) }.toMutableList())
                 val isEmpty = l.isEmpty() && it.isEmpty()

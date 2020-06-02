@@ -8,10 +8,6 @@ import dagger.Provides
 
 @Module
 class MainModuleDependencies {
-    @Provides
-    fun provideMainRepo(dataSource: Dao): MainRepository{
-        return MainRepository(dataSource)
-    }
 
     @Provides
     fun provideMainUseCase(repo: MainRepository): MainUseCase{

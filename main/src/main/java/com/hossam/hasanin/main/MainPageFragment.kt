@@ -1,17 +1,16 @@
 package com.hossam.hasanin.main
 
-import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import com.hossam.hasanin.base.navigationController.NavigationManager
 import com.hossam.hasanin.base.externals.onEndReached
-import com.hossam.hasanin.base.models.Note
 import com.hossam.hasanin.base.wrappers.NoteWrapper
 import dagger.android.support.DaggerFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,6 +25,8 @@ class MainPageFragment : DaggerFragment() {
     @Inject lateinit var modelFactory: ViewModelProvider.Factory
     private lateinit var disposable: Disposable
     @Inject lateinit var notesAdapter: NotesAdapter
+    @Inject lateinit var navigationManager: NavigationManager
+    var done: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,8 +39,19 @@ class MainPageFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        toolbarViewMode()
+
+        arguments?.apply {
+            done = getBoolean("done")
+
+            if (done){
+                Snackbar.make(cont , "Saved successfully !" , Snackbar.LENGTH_LONG).show()
+            }
+        }
+
         notesAdapter.goToAction = {
-            findNavController().navigate(Uri.parse("myListy://upsert/${it?.id}/${it?.title}/${it?.description}"))
+            navigationManager.navigateTo(NavigationManager.UPSERT_NOTE , Bundle().apply { putBoolean("new" , false)
+                putParcelable("note" , it) })
         }
 
         model = ViewModelProvider(this , modelFactory)[MainViewModel::class.java]
@@ -49,6 +61,7 @@ class MainPageFragment : DaggerFragment() {
 //        }
 
         disposable = model.viewState().observeOn(AndroidSchedulers.mainThread()).subscribe {
+            Log.v("koko" , it.toString())
             if (it.loading){
                 loading.visibility = View.VISIBLE
             } else {
@@ -85,10 +98,22 @@ class MainPageFragment : DaggerFragment() {
             }
         }
 
+        rv_notes.layoutManager = LinearLayoutManager(activity)
+        rv_notes.adapter = notesAdapter
+
         rv_notes.onEndReached {
             model.getMore()
         }
 
+        btn_add.setOnClickListener {
+            navigationManager.navigateTo(NavigationManager.UPSERT_NOTE , Bundle().apply { putBoolean("new" , true) })
+        }
+
+    }
+
+    fun toolbarViewMode(){
+        requireActivity().findViewById<AppCompatImageView>(R.id.right_btn).visibility = View.GONE
+        requireActivity().findViewById<AppCompatImageView>(R.id.left_btn).visibility = View.GONE
     }
 
     override fun onDestroy() {
