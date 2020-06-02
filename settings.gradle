@@ -1,3 +1,4 @@
+include ':upsertNote'
 include ':main'
 include ':base'
 include ':app'

@@ -1,8 +1,10 @@
 package com.hossam.hasanin.mylisty.di
 
-import com.hossam.hasanin.main.MainActivity
 import com.hossam.hasanin.main.MainModuleDependencies
+import com.hossam.hasanin.main.MainPageFragment
 import com.hossam.hasanin.main.MainViewModelsModule
+import com.hossam.hasanin.mylisty.MainActivity
+import com.hossam.hasanin.upsertnote.UpsertNoteFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -13,6 +15,9 @@ abstract class ActivityBuildersModule {
         MainModuleDependencies::class,
         MainViewModelsModule::class
     ])
-    abstract fun bindMainActivity(): MainActivity
+    abstract fun bindMainFragment(): MainPageFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindUpsertFragment(): UpsertNoteFragment
 
 }

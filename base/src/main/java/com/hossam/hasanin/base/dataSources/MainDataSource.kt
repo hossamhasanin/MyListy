@@ -4,7 +4,7 @@ import android.util.Log
 
 class MainDataSource {
 
-    fun show(){
+    fun showAllBo(){
         Log.v("koko" , "datascource works")
     }
 
